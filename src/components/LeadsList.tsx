@@ -15,9 +15,9 @@ import type { Lead, LeadStatus } from '../types';
 
 interface LeadFilters {
   searchTerm: string;
+  sortOrder: 'asc' | 'desc';
   statusFilter: LeadStatus | 'all';
   sortBy: 'score' | 'name' | 'company';
-  sortOrder: 'asc' | 'desc';
 }
 
 interface LeadsListProps {
@@ -39,11 +39,11 @@ const statusLabels: Record<LeadStatus, string> = {
 
 export function LeadsList({
   leads,
-  onLeadSelect,
-  loading = false,
   filters,
-  onFiltersChange,
+  loading = false,
+  onLeadSelect,
   onResetFilters,
+  onFiltersChange,
 }: LeadsListProps) {
   const { searchTerm, statusFilter, sortBy, sortOrder } = filters;
 

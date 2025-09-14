@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import { X, Save, XCircle, Edit3 } from 'lucide-react';
 
 import { Button } from './ui/button';
 import type { Lead, LeadStatus } from '../types';
+import { useLeadDetailReducer } from '@/hooks/reducers/useLeadDetailReducer';
 
 interface LeadDetailPanelProps {
   lead: Lead | null;
@@ -35,62 +35,17 @@ export function LeadDetailPanel({
   onSave,
   onConvertToOpportunity,
 }: LeadDetailPanelProps) {
-  const [editedLead, setEditedLead] = useState<Lead | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const {
+    state,
+    dispatch,
+    handleSave,
+    handleCancel,
+    handleEmailChange,
+    handleStatusChange,
+    handleConvertToOpportunity,
+  } = useLeadDetailReducer(lead, onSave, onConvertToOpportunity);
 
-  useEffect(() => {
-    if (lead) {
-      setEditedLead({ ...lead });
-      setIsEditing(false);
-      setEmailError('');
-    }
-  }, [lead]);
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleEmailChange = (email: string): void => {
-    setEditedLead((prev) => (prev ? { ...prev, email } : null));
-    if (email && !validateEmail(email)) {
-      setEmailError('Invalid email format');
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const handleStatusChange = (status: LeadStatus): void => {
-    setEditedLead((prev) => (prev ? { ...prev, status } : null));
-  };
-
-  const handleSave = (): void => {
-    if (!editedLead) return;
-
-    if (editedLead.email && !validateEmail(editedLead.email)) {
-      setEmailError('Invalid email format');
-      return;
-    }
-
-    onSave(editedLead);
-    setIsEditing(false);
-    setEmailError('');
-  };
-
-  const handleCancel = (): void => {
-    if (lead) {
-      setEditedLead({ ...lead });
-    }
-    setIsEditing(false);
-    setEmailError('');
-  };
-
-  const handleConvertToOpportunity = (): void => {
-    if (lead) {
-      onConvertToOpportunity(lead);
-    }
-  };
+  const { editedLead, emailError, isEditing } = state;
 
   if (!isOpen || !lead || !editedLead) {
     return null;
@@ -234,18 +189,16 @@ export function LeadDetailPanel({
             {!isEditing ? (
               <div className="flex gap-3">
                 <Button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() =>
+                    dispatch({ type: 'SET_EDITING', payload: true })
+                  }
                   className="flex-1"
                   variant="outline"
                 >
                   <Edit3 className="h-4 w-4 mr-2" />
                   Edit
                 </Button>
-                <Button
-                  onClick={handleConvertToOpportunity}
-                  className="flex-1"
-                  disabled={editedLead.status === 'converted'}
-                >
+                <Button onClick={handleConvertToOpportunity} className="flex-1">
                   Convert to Opportunity
                 </Button>
               </div>

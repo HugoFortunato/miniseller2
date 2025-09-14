@@ -8,13 +8,14 @@ import { Users, Target } from 'lucide-react';
 function App() {
   const {
     leads,
-    opportunities,
-    loading,
     error,
+    loading,
     selectedLead,
+    opportunities,
     isDetailPanelOpen,
-    handleLeadSelect,
+
     handleLeadSave,
+    handleLeadSelect,
     handleConvertToOpportunity,
     handleCloseDetailPanel,
   } = useLeads();

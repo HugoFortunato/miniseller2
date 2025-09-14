@@ -1,30 +1,26 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useReducer } from 'react';
 
 import type { Lead, Opportunity } from '../types';
 import leadsData from '../data/leads.json';
+import { initialLeadsState, leadsReducer } from './reducers/useLeadsReducer';
 
 export function useLeads() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [state, dispatch] = useReducer(leadsReducer, initialLeadsState);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        dispatch({ type: 'SET_LOADING', payload: true });
+        dispatch({ type: 'SET_ERROR', payload: null });
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        setLeads(leadsData as Lead[]);
+        dispatch({ type: 'SET_LEADS', payload: leadsData as Lead[] });
       } catch (err) {
-        setError('Error loading leads');
+        dispatch({ type: 'SET_ERROR', payload: 'Error loading leads' });
         console.error('Error loading leads:', err);
       } finally {
-        setLoading(false);
+        dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
 
@@ -32,15 +28,12 @@ export function useLeads() {
   }, []);
 
   const handleLeadSelect = useCallback((lead: Lead): void => {
-    setSelectedLead(lead);
-    setIsDetailPanelOpen(true);
+    dispatch({ type: 'SET_SELECTED_LEAD', payload: lead });
+    dispatch({ type: 'TOGGLE_DETAIL_PANEL', payload: true });
   }, []);
 
   const handleLeadSave = useCallback((updatedLead: Lead): void => {
-    setLeads((prevLeads) =>
-      prevLeads.map((lead) => (lead.id === updatedLead.id ? updatedLead : lead))
-    );
-    setSelectedLead(updatedLead);
+    dispatch({ type: 'UPDATE_LEAD', payload: updatedLead });
   }, []);
 
   const handleConvertToOpportunity = useCallback((lead: Lead): void => {
@@ -56,30 +49,22 @@ export function useLeads() {
         accountName: lead.company,
       };
 
-      setOpportunities((prev) => [...prev, newOpportunity]);
+      dispatch({ type: 'ADD_OPPORTUNITY', payload: newOpportunity });
 
       const updatedLead = { ...lead, status: 'converted' as const };
-      setLeads((prevLeads) =>
-        prevLeads.map((l) => (l.id === lead.id ? updatedLead : l))
-      );
-      setSelectedLead(updatedLead);
+      dispatch({ type: 'UPDATE_LEAD', payload: updatedLead });
 
-      setIsDetailPanelOpen(false);
+      dispatch({ type: 'TOGGLE_DETAIL_PANEL', payload: false });
     }, 500);
   }, []);
 
   const handleCloseDetailPanel = useCallback((): void => {
-    setIsDetailPanelOpen(false);
-    setSelectedLead(null);
+    dispatch({ type: 'TOGGLE_DETAIL_PANEL', payload: false });
+    dispatch({ type: 'SET_SELECTED_LEAD', payload: null });
   }, []);
 
   return {
-    leads,
-    opportunities,
-    loading,
-    error,
-    selectedLead,
-    isDetailPanelOpen,
+    ...state,
     handleLeadSelect,
     handleLeadSave,
     handleConvertToOpportunity,
