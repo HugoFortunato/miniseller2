@@ -23,6 +23,12 @@ This project uses a feature-based architecture, organizing code by feature rathe
 
 Tailwind CSS is used for styling to provide a utility-first approach, making it easy to create responsive and modern designs. Additionally, components from the Shadcn library are utilized to replace native inputs and cards, enhancing the UI consistency and aesthetics.
 
+## Testing and Scalability
+
+To ensure quality and maintainability, the project includes unit tests built with Jest and React Testing Library. As the application scales, additional tests can be written to cover new features and edge cases.
+
+For global state management, the project could be extended by creating a dedicated store/ folder to organize state slices, enabling better separation of concerns and supporting more complex workflows.
+
 ## Getting Started
 
 ### Prerequisites
@@ -69,5 +75,3 @@ This will run all unit tests and display the results in the terminal.
 - The project uses Vite for fast development and build processes.
 - Jest and React Testing Library are used for testing components and hooks.
 - TypeScript is employed throughout the project to ensure type safety and improve code quality.
-
-Feel free to explore the codebase and contribute to the project!
