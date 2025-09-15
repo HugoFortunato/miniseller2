@@ -1,0 +1,235 @@
+# Mini Seller Console - Cursor Rules
+
+## 🏗️ Architecture and Structure
+
+### Feature-Based Architecture
+
+This project uses a feature-based architecture, organizing code by functionality instead of file type. This approach provides:
+
+- **Scalability**: Each feature is independent and can grow without affecting others
+- **Maintainability**: Developers quickly find all code related to a functionality
+- **Collaboration**: Teams can work on different features without conflicts
+- **Testability**: Isolated features are easier to test and debug
+- **Reusability**: Components and hooks can be easily reused between features
+
+### Separation of Concerns
+
+- **Components**: Only presentation logic and UI interaction
+- **Custom Hooks**: Business logic and state management
+- **Reducers**: Complex state with multiple actions
+- **Helpers**: Pure and reusable utility functions
+
+## 📝 Naming Conventions
+
+### Components
+
+- **ALWAYS** use PascalCase for component names
+- Examples: `LeadsList`, `LeadDetailPanel`, `OpportunitiesTable`
+- Component files must have `.tsx` extension
+
+### Custom Hooks
+
+- Prefix `use` followed by PascalCase
+- Examples: `useLeads`, `useLeadFilters`, `useLeadDetailReducer`
+- Files must have `.ts` extension
+
+### Types and Interfaces
+
+- Interfaces: PascalCase with descriptive prefix
+- Examples: `Lead`, `Opportunity`, `LeadFilters`, `LeadsState`
+- Types: PascalCase
+- Examples: `LeadStatus`, `OpportunityStage`
+
+### Files and Folders
+
+- Components: `PascalCase.tsx`
+- Hooks: `camelCase.ts`
+- Types: `index.ts` or `types.ts`
+- Helpers: `camelCase.ts`
+- Tests: `ComponentName.test.tsx`
+
+## 🧪 Mandatory Tests
+
+### For Each Component
+
+- **ALWAYS** create corresponding test file
+- Location: `src/components/__tests__/`
+- Name: `ComponentName.test.tsx`
+- Minimum coverage: rendering, basic interactions, props
+
+### For Each Custom Hook
+
+- **ALWAYS** create corresponding test file
+- Location: `src/hooks/__tests__/`
+- Name: `useHookName.test.ts`
+- Coverage: hook behavior, states, side effects
+
+### Test Patterns
+
+```typescript
+// Basic test structure
+describe('ComponentName', () => {
+  it('should render correctly', () => {
+    // Rendering test
+  });
+
+  it('should handle user interactions', () => {
+    // Interaction test
+  });
+
+  it('should handle props correctly', () => {
+    // Props test
+  });
+});
+```
+
+## 🎯 Development Patterns
+
+### Components
+
+- **ALWAYS** use TypeScript with explicit typing
+- **ALWAYS** define interface for props
+- **ALWAYS** use Shadcn UI components when available
+- **ALWAYS** apply Tailwind classes for styling
+- **NEVER** use `any` - always type explicitly
+
+### Custom Hooks
+
+- **ALWAYS** separate business logic from components
+- **ALWAYS** use `useCallback` for functions passed as props
+- **ALWAYS** use `useMemo` for expensive calculations
+- **ALWAYS** return object with descriptive names
+
+### State and Data
+
+- **ALWAYS** use `useReducer` for complex state
+- **ALWAYS** persist filters and preferences in localStorage
+- **ALWAYS** simulate latency with setTimeout for async operations
+- **ALWAYS** validate input data (especially emails)
+
+## 🔧 Code Quality
+
+### Imports
+
+- **ALWAYS** group imports: React, external libraries, internal components, types
+- **ALWAYS** use `import type` for type imports
+- **ALWAYS** use absolute paths when configured (`@/`)
+
+### Performance
+
+- **ALWAYS** optimize unnecessary re-renders
+- **ALWAYS** use `React.memo` for heavy components when appropriate
+- **ALWAYS** debounce search inputs
+- **ALWAYS** lazy load heavy components
+
+### Accessibility
+
+- **ALWAYS** use appropriate semantic elements
+- **ALWAYS** add labels for inputs
+- **ALWAYS** use ARIA attributes when necessary
+- **ALWAYS** ensure keyboard navigation
+
+## 📱 Responsiveness
+
+### Tailwind Breakpoints
+
+- **ALWAYS** use responsive classes: `sm:`, `md:`, `lg:`, `xl:`
+- **ALWAYS** test on different screen sizes
+- **ALWAYS** use `overflow-x-auto` for tables on mobile
+
+### Layout
+
+- **ALWAYS** use flexbox or grid for layouts
+- **ALWAYS** consider mobile-first approach
+- **ALWAYS** test on real devices
+
+## 🚀 Best Practices
+
+### File Structure
+
+```
+src/
+├── components/          # Reusable components
+│   ├── ui/              # Base components (Shadcn)
+│   └── __tests__/       # Component tests
+├── hooks/               # Custom hooks
+│   ├── reducers/        # Reducers for complex state
+│   └── __tests__/       # Hook tests
+├── types/               # Type definitions
+├── helpers/             # Utility functions
+├── data/                # Static data
+└── __tests__/           # General tests
+```
+
+### Comments and Documentation
+
+- **ALWAYS** document complex functions
+- **ALWAYS** use JSDoc for public functions
+- **ALWAYS** explain non-obvious business logic
+- **NEVER** leave commented code in production
+
+### Error Handling
+
+- **ALWAYS** handle errors gracefully
+- **ALWAYS** show user-friendly error messages
+- **ALWAYS** log errors for debugging
+- **ALWAYS** have fallbacks for error states
+
+## 🎨 UI/UX Guidelines
+
+### Design System
+
+- **ALWAYS** use Shadcn UI as base
+- **ALWAYS** follow Tailwind design tokens
+- **ALWAYS** maintain visual consistency
+- **ALWAYS** use semantic colors (success, error, warning)
+
+### Interactions
+
+- **ALWAYS** add loading states
+- **ALWAYS** show visual feedback for actions
+- **ALWAYS** use smooth transitions
+- **ALWAYS** disable buttons during operations
+
+### Empty States
+
+- **ALWAYS** show informative messages
+- **ALWAYS** suggest next actions
+- **ALWAYS** use illustrations or icons when appropriate
+
+## 🔒 Security and Validation
+
+### Data Validation
+
+- **ALWAYS** validate user inputs
+- **ALWAYS** sanitize data before using
+- **ALWAYS** use regex for email validation
+- **ALWAYS** limit input sizes
+
+### Performance
+
+- **ALWAYS** optimize bundle size
+- **ALWAYS** use code splitting when appropriate
+- **ALWAYS** monitor performance with DevTools
+- **ALWAYS** avoid unnecessary re-renders
+
+---
+
+## 📋 Development Checklist
+
+Before committing, verify:
+
+- [ ] Component created in PascalCase
+- [ ] Tests created and passing
+- [ ] Complete TypeScript typing
+- [ ] Logic separated in hooks
+- [ ] Responsiveness implemented
+- [ ] Accessibility considered
+- [ ] Performance optimized
+- [ ] Error handling implemented
+- [ ] Clean and documented code
+- [ ] Architecture patterns followed
+
+---
+
+_This file serves as a guide to maintain consistency and quality in the Mini Seller Console project._
